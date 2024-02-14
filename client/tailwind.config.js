@@ -31,9 +31,9 @@ export default {
       green: "#71DD37",
       red: "#FF3E1D",
     },
-    // fontFamily: {
-    //   sans: ["Public Sans", "sans-serif"],
-    // },
+    fontFamily: {
+      sans: ["Public Sans", "sans-serif"],
+    },
     extend: {
       boxShadow: {
         sidebar: "1px 1px 8px rgba(219, 213, 226, 0.80)",

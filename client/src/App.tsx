@@ -1,14 +1,24 @@
-import { Button } from "primereact/button";
+import { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+const Home = lazy(() => import("./views/Home"));
+const Search = lazy(() => import("./views/Search"));
+const Cart = lazy(() => import("./views/Cart"));
+const NotFound = lazy(() => import("./views/NotFound"));
+import OverlayLoader from "./components/Spinner/OverlayLoader";
 
 const App = () => {
   return (
-    <div>
-      <h1>Hello World</h1>
-      <div className="m-4">
-        <Button label="Click me" />
-      </div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </div>
+    <Router>
+      <Suspense fallback={<OverlayLoader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </Router>
   );
 };
 
