@@ -44,8 +44,7 @@ export default {
         card: "1px 1px 8px 0px #DBD5E2CC",
       },
       backgroundImage: {
-        // title: "url('/src/assets/images/title-bg.jpg')",
-        // dialogHeader: "url('/src/assets/images/dialog-banner.png')",
+        // Banner: "url('/src/assets/images/banner2.jpg')",
       },
     },
   },

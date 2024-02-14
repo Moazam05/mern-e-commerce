@@ -1,14 +1,13 @@
+import { BannerImage } from "../../assets";
+
 const Home = () => {
   return (
-    <div>
-      <div className="flex justify-center items-center">
-        <input
-          type="text"
-          placeholder="Search"
-          className="w-96 text-gray-200 text-[14px] py-2 px-4 rounded-lg focus:outline-none font-medium"
-          // onClick={() => navigate("/search")}
-        />
-      </div>
+    <div className="container my-12">
+      <img
+        src={BannerImage}
+        alt="Banner"
+        className="w-full bg-no-repeat bg-current bg-cover"
+      />
     </div>
   );
 };
