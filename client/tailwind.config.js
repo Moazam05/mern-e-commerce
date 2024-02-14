@@ -11,6 +11,10 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "12rem",
+    },
     colors: {
       transparent: "transparent",
       current: "currentColor",
@@ -28,7 +32,6 @@ export default {
       "blue-100": "#4F52E6",
       "blue-200": "#F3F3FF",
       "purple-100": "#E7E7FF",
-      green: "#71DD37",
       red: "#FF3E1D",
     },
     fontFamily: {

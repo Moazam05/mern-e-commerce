@@ -6,10 +6,12 @@ const Search = lazy(() => import("./views/Search"));
 const Cart = lazy(() => import("./views/Cart"));
 const NotFound = lazy(() => import("./views/NotFound"));
 import OverlayLoader from "./components/Spinner/OverlayLoader";
+import Header from "./components/Header";
 
 const App = () => {
   return (
     <Router>
+      <Header />
       <Suspense fallback={<OverlayLoader />}>
         <Routes>
           <Route path="/" element={<Home />} />
