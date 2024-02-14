@@ -33,6 +33,7 @@ export default {
       "blue-200": "#F3F3FF",
       "purple-100": "#E7E7FF",
       red: "#FF3E1D",
+      cyan: "#06b6d4",
     },
     fontFamily: {
       sans: ["Public Sans", "sans-serif"],

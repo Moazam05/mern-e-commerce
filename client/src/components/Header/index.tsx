@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <div className="bg-[#75c2d7]">
       <div className="container">
-        <div className="p-4 flex justify-between items-center">
+        <div className="py-4 flex justify-between items-center">
           <div className="cursor-pointer" onClick={() => navigate("/")}>
             <BiLogoDigitalocean className="text-3xl text-white" />
           </div>
