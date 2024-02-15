@@ -22,15 +22,17 @@ const Header = () => {
             <div onClick={() => navigate("/cart")}>
               <i className="bx bx-cart text-white text-[28px]"></i>
             </div>
-            <Button
-              label="Login"
-              size="small"
-              className="bg-transparent mx-2 border-0 text-white font-bold text-[14px] py-2 px-4"
-            />
+            <div
+              className="mx-2 text-white font-medium text-[16px] p-2"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </div>
             <Button
               label="Sign Up"
               size="small"
-              className="font-bold text-[14px] py-2 px-4 border-white"
+              className="font-medium text-[14px] py-2 px-4 border-white"
+              onClick={() => navigate("/signup")}
             />
           </div>
         </div>

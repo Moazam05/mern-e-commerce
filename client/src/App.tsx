@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import OverlayLoader from "./components/Spinner/OverlayLoader";
 import Header from "./components/Header";
+
 const Home = lazy(() => import("./views/Home"));
 const Search = lazy(() => import("./views/Search"));
 const Cart = lazy(() => import("./views/Cart"));
@@ -11,6 +12,8 @@ const Products = lazy(() => import("./views/Products"));
 const SingleProduct = lazy(
   () => import("./views/Products/components/SingleProduct")
 );
+const Login = lazy(() => import("./views/Login"));
+const Signup = lazy(() => import("./views/Signup"));
 
 const App = () => {
   return (
@@ -23,6 +26,8 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product" element={<Products />} />
           <Route path="/product/:id" element={<SingleProduct />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
