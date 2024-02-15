@@ -34,6 +34,7 @@ export default {
       "purple-100": "#E7E7FF",
       orange: "#f57224",
       cyan: "#06b6d4",
+      "cyan-50": "rgba(7, 182, 213, 0.15)",
     },
     fontFamily: {
       sans: ["Public Sans", "sans-serif"],

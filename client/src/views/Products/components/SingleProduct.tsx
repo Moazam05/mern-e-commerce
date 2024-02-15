@@ -3,8 +3,11 @@ import { Surf } from "../../../assets";
 import { useState } from "react";
 import { Button } from "primereact/button";
 import { BsCash } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const SingleProduct = () => {
+  const navigate = useNavigate();
+
   const [quantity, setQuantity] = useState(1);
 
   return (
@@ -60,8 +63,9 @@ const SingleProduct = () => {
                   <Button
                     label="Add to Cart"
                     className="w-full bg-orange text-white rounded-none border-none
-                    focus:shadow-none                    "
+                    focus:shadow-none cursor-pointer"
                     size="small"
+                    onClick={() => navigate("/cart")}
                   />
                 </div>
               </div>

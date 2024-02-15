@@ -18,11 +18,14 @@ const Header = () => {
             className="w-96 text-gray-200 text-[14px] py-2 px-4 rounded-lg focus:outline-none font-medium ml-32"
             onClick={() => navigate("/search")}
           />
-          <div className="flex items-center">
+          <div className="flex items-center cursor-pointer">
+            <div onClick={() => navigate("/cart")}>
+              <i className="bx bx-cart text-white text-[28px]"></i>
+            </div>
             <Button
               label="Login"
               size="small"
-              className="bg-transparent border-0 text-white font-bold text-[14px] py-2 px-4"
+              className="bg-transparent mx-2 border-0 text-white font-bold text-[14px] py-2 px-4"
             />
             <Button
               label="Sign Up"

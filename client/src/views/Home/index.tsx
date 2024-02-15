@@ -52,7 +52,7 @@ const Home = () => {
                 <div
                   className="w-44 hover:shadow-sidebar p-2 cursor-pointer"
                   key={product?.id}
-                  onClick={() => navigate(`/product/${product?.id}`)}
+                  onClick={() => navigate(`/product/${product?.name}`)}
                 >
                   <img src={product?.image} alt="brand" />
                   <div className="text-[14px]">{product?.name}</div>

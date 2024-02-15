@@ -19,3 +19,7 @@
 body {
   @apply m-0 bg-body font-sans;
 }
+
+.checkbox-custom .p-checkbox .p-checkbox-box {
+  border-radius: 0 !important;
+}
