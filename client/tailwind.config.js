@@ -32,7 +32,7 @@ export default {
       "blue-100": "#4F52E6",
       "blue-200": "#F3F3FF",
       "purple-100": "#E7E7FF",
-      red: "#FF3E1D",
+      orange: "#f57224",
       cyan: "#06b6d4",
     },
     fontFamily: {

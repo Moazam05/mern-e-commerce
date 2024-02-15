@@ -1,5 +1,6 @@
 import { Divider } from "primereact/divider";
 import { BannerImage, Knorr, Shampoo, Surf } from "../../assets";
+import { useNavigate } from "react-router-dom";
 
 const saleProducts = [
   {
@@ -23,6 +24,8 @@ const saleProducts = [
 ];
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="container">
       <div className="my-6">
@@ -47,8 +50,9 @@ const Home = () => {
             {saleProducts.map((product) => {
               return (
                 <div
-                  className="w-44 hover:shadow-sidebar p-2"
+                  className="w-44 hover:shadow-sidebar p-2 cursor-pointer"
                   key={product?.id}
+                  onClick={() => navigate(`/product/${product?.id}`)}
                 >
                   <img src={product?.image} alt="brand" />
                   <div className="text-[14px]">{product?.name}</div>
