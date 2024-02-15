@@ -18,8 +18,8 @@ const dummyCarts = [
 
 const Cart = () => {
   const navigate = useNavigate();
-  const [allChecked, setAllChecked] = useState<boolean>(false);
-  const [checkedItems, setCheckedItems] = useState(false);
+  const [allChecked, setAllChecked] = useState<boolean | undefined>(false);
+  const [checkedItems, setCheckedItems] = useState<boolean | undefined>(false);
   const [quantity, setQuantity] = useState(1);
 
   return (
@@ -47,7 +47,7 @@ const Cart = () => {
                     <div className="checkbox-custom">
                       <Checkbox
                         onChange={(e) => setAllChecked(e.checked)}
-                        checked={allChecked}
+                        checked={allChecked || false}
                       ></Checkbox>
                     </div>
                     Select All
@@ -64,7 +64,7 @@ const Cart = () => {
                   <div className="checkbox-custom">
                     <Checkbox
                       onChange={(e) => setCheckedItems(e.checked)}
-                      checked={checkedItems}
+                      checked={checkedItems || false}
                     ></Checkbox>
                   </div>
                   <div className="w-28">

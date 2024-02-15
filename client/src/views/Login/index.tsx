@@ -18,17 +18,18 @@ const Login = () => {
 
   // states
   const [showPassword, setShowPassword] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [formValues, setFormValues] = useState<ISLoginForm>({
+  const formValues = {
     email: "",
     password: "",
-  });
+  };
 
   const hideShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const LoginHandler = async (values: ISLoginForm) => {};
+  const LoginHandler = async (values: ISLoginForm) => {
+    console.log(values);
+  };
 
   return (
     <div className="container">
