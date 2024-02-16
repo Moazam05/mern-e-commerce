@@ -23,3 +23,7 @@ body {
 .checkbox-custom .p-checkbox .p-checkbox-box {
   border-radius: 0 !important;
 }
+
+.p-inputtext {
+  @apply text-[14px];
+}
