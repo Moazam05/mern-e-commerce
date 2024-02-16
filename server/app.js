@@ -7,7 +7,7 @@ require("dotenv").config();
 // Custom Imports
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
-// const userRouter = require("./routes/userRoutes");
+const userRouter = require("./routes/userRoutes");
 
 const corsOptions = {
   origin: "*",
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
-// app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users", userRouter);
 
 // PRODUCTION SETUP
 if (process.env.NODE_ENV === "production") {
