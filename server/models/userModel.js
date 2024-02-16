@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: true,
+      unique: [true, "Email already exists"],
       lowercase: true,
       required: [true, "Please provide your email"],
       validate: [validator.isEmail, "Please provide a valid email"],
@@ -40,6 +40,16 @@ const userSchema = new mongoose.Schema(
       required: true,
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female"],
+      required: [true, "Please provide your gender"],
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
