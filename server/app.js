@@ -18,6 +18,7 @@ const corsOptions = {
 
 const app = express();
 app.use(cors(corsOptions));
+app.use("/uploads", express.static("uploads"));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

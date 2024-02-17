@@ -2,6 +2,7 @@ const express = require("express");
 const productController = require("../controllers/productController");
 const authController = require("../controllers/authController");
 const { onlyAdmin } = require("../middleware/auth");
+const singleUpload = require("../middleware/multer");
 
 const router = express.Router();
 
@@ -10,11 +11,6 @@ router.use(authController.protect);
 router.use(onlyAdmin);
 
 // create product
-router.post("/", productController.createProduct);
-// router.get("/", productController.getAllProducts);
-// router
-//   .get("/:id", productController.getProduct)
-//   .put("/:id", productController.updateProduct)
-//   .delete("/:id", productController.deleteProduct);
+router.post("/", singleUpload, productController.createProduct);
 
 module.exports = router;

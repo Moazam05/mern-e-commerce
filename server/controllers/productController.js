@@ -2,18 +2,13 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Product = require("../models/productModel");
 const checkRequiredFields = require("../utils/requiredFieldError");
-const cloudinary = require("../cloudinary");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
+  const { name, description, price, stock, category } = req.body;
+  const image = req.file;
+
   // 1) Check required fields
-  const requiredFields = [
-    "name",
-    "description",
-    "price",
-    "stock",
-    "category",
-    "image",
-  ];
+  const requiredFields = ["name", "description", "price", "stock", "category"];
   const missingFields = checkRequiredFields(req.body, requiredFields);
 
   if (missingFields.length > 0) {
@@ -22,19 +17,13 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2) Image upload to Cloudinary
-  const result = await cloudinary.uploader.upload(req.body.image, {
-    folder: "ecommerce",
-    public_id: `${req.body.name}-${Date.now()}`,
-  });
-
   const newProduct = await Product.create({
-    name: req.body.name,
-    description: req.body.description,
-    price: req.body.price,
-    stock: req.body.stock,
-    category: req.body.category,
-    image: result.secure_url,
+    name,
+    description,
+    price,
+    stock,
+    category,
+    image: image?.path,
   });
 
   res.status(201).json({
