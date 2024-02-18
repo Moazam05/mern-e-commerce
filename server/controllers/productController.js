@@ -1,3 +1,4 @@
+require("dotenv").config();
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Product = require("../models/productModel");
@@ -49,7 +50,7 @@ exports.allSearchProducts = catchAsync(async (req, res, next) => {
   // Pagination
   const page = req.query.page * 1 || 1;
   // product per page env variable
-  const limit = req.query.limit * 1 || 2;
+  const limit = req.query.limit * 1 || process.env.PRODUCTS_PER_PAGE;
   const skip = (page - 1) * limit;
 
   let baseQuery = {};
@@ -66,14 +67,22 @@ exports.allSearchProducts = catchAsync(async (req, res, next) => {
     baseQuery.category = category;
   }
 
-  const products = await Product.find(baseQuery)
-    .sort(sort)
+  const productPromise = Product.find(baseQuery)
+    .sort(sort && { price: sort === "asc" ? 1 : -1 })
     .skip(skip)
     .limit(limit);
+
+  const [products, totalProducts] = await Promise.all([
+    productPromise,
+    Product.find(baseQuery),
+  ]);
+
+  const totalPages = Math.ceil(totalProducts.length / limit);
 
   res.status(200).json({
     status: "success",
     results: products.length,
+    totalPages,
     data: products,
   });
 });
