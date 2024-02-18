@@ -8,9 +8,8 @@ const router = express.Router();
 
 // PROTECTED ROUTES
 router.use(authController.protect);
-router.use(onlyAdmin);
 
 // create product
-router.post("/", singleUpload, productController.createProduct);
+router.post("/", onlyAdmin, singleUpload, productController.createProduct);
 
 module.exports = router;
