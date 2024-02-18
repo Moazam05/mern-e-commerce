@@ -43,6 +43,41 @@ exports.getProduct = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.allSearchProducts = catchAsync(async (req, res, next) => {
+  const { search, sort, category, price } = req.query;
+
+  // Pagination
+  const page = req.query.page * 1 || 1;
+  // product per page env variable
+  const limit = req.query.limit * 1 || 2;
+  const skip = (page - 1) * limit;
+
+  let baseQuery = {};
+
+  if (search) {
+    baseQuery.name = { $regex: search, $options: "i" };
+  }
+
+  if (price) {
+    baseQuery.price = { $lte: price * 1 };
+  }
+
+  if (category) {
+    baseQuery.category = category;
+  }
+
+  const products = await Product.find(baseQuery)
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
+
+  res.status(200).json({
+    status: "success",
+    results: products.length,
+    data: products,
+  });
+});
+
 // TODO: ADMIN ONLY
 exports.createProduct = catchAsync(async (req, res, next) => {
   const { name, description, price, stock, category } = req.body;

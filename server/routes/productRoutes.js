@@ -9,9 +9,10 @@ const router = express.Router();
 // PUBLIC ROUTES
 
 router.get("/categories", productController.getCategories);
-router.get("/", productController.getAllProducts);
 router.get("/latest", productController.getLatestProducts);
+router.get("/all", productController.allSearchProducts);
 router.get("/:id", productController.getProduct);
+router.get("/", productController.getAllProducts);
 
 // PROTECTED ROUTES
 router.use(authController.protect);
