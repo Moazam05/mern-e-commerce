@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === "production") {
   });
 } else {
   app.get("/", (req, res) => {
-    res.send("Portfolio API is running...");
+    res.send("Ecommerce API is running...");
   });
 }
 
