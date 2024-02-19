@@ -44,10 +44,13 @@ app.use("/api/v1/products", productRouter);
 
 // PRODUCTION SETUP
 if (process.env.NODE_ENV === "production") {
-  const __dirname = path.resolve();
-  app.use(express.static("../client/build"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  // const __dirname = path.resolve();
+  // app.use(express.static("../client/build"));
+  // app.get("*", (req, res) => {
+  //   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  // });
+  app.get("/", (req, res) => {
+    res.send("Production Mode: Ecommerce API is running...");
   });
 } else {
   app.get("/", (req, res) => {
