@@ -4,9 +4,19 @@ const AppError = require("../utils/appError");
 const Product = require("../models/productModel");
 const checkRequiredFields = require("../utils/requiredFieldError");
 const { rm } = require("fs");
+const { myCache } = require("../server");
 
+// TODO: Revalidate cache on update, delete, or create, or place new order
 exports.getLatestProducts = catchAsync(async (req, res, next) => {
-  const latestProducts = await Product.find().sort({ createdAt: -1 }).limit(5);
+  let latestProducts;
+
+  if (myCache && myCache.has("latestProducts")) {
+    latestProducts = JSON.parse(myCache.get("latestProducts"));
+  } else {
+    latestProducts = await Product.find().sort({ createdAt: -1 }).limit(5);
+    (await myCache) &&
+      myCache.set("latestProducts", JSON.stringify(latestProducts));
+  }
 
   res.status(200).json({
     status: "success",
@@ -14,8 +24,16 @@ exports.getLatestProducts = catchAsync(async (req, res, next) => {
   });
 });
 
+// TODO: Revalidate cache
 exports.getCategories = catchAsync(async (req, res, next) => {
-  const categories = await Product.find().distinct("category");
+  let categories;
+
+  if (myCache && myCache.has("categories")) {
+    categories = JSON.parse(myCache.get("categories"));
+  } else {
+    categories = await Product.find().distinct("category");
+    myCache && myCache.set("categories", JSON.stringify(categories));
+  }
 
   res.status(200).json({
     status: "success",
@@ -23,8 +41,16 @@ exports.getCategories = catchAsync(async (req, res, next) => {
   });
 });
 
+// TODO: Revalidate cache
 exports.getAllProducts = catchAsync(async (req, res, next) => {
-  const products = await Product.find();
+  let products;
+
+  if (myCache && myCache.has("products")) {
+    products = JSON.parse(myCache.get("products"));
+  } else {
+    products = await Product.find();
+    myCache && myCache.set("products", JSON.stringify(products));
+  }
 
   res.status(200).json({
     status: "success",
@@ -33,8 +59,17 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
   });
 });
 
+// TODO: Revalidate cache
 exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+  let product;
+  const id = req.params.id;
+
+  if (myCache && myCache.has(`product-${id}`)) {
+    product = JSON.parse(myCache.get(`product-${id}`));
+  } else {
+    product = await Product.findById(req.params.id);
+    myCache && myCache.set(`product-${id}`, JSON.stringify(product));
+  }
 
   if (!product) return next(new AppError("Product not found", 404));
 
