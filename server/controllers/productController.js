@@ -5,6 +5,7 @@ const Product = require("../models/productModel");
 const checkRequiredFields = require("../utils/requiredFieldError");
 const { rm } = require("fs");
 const { myCache } = require("../server");
+const { invalidateCache } = require("../utils");
 
 // TODO: Revalidate cache on update, delete, or create, or place new order
 exports.getLatestProducts = catchAsync(async (req, res, next) => {
@@ -24,7 +25,6 @@ exports.getLatestProducts = catchAsync(async (req, res, next) => {
   });
 });
 
-// TODO: Revalidate cache
 exports.getCategories = catchAsync(async (req, res, next) => {
   let categories;
 
@@ -41,7 +41,6 @@ exports.getCategories = catchAsync(async (req, res, next) => {
   });
 });
 
-// TODO: Revalidate cache
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   let products;
 
@@ -59,7 +58,6 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
   });
 });
 
-// TODO: Revalidate cache
 exports.getProduct = catchAsync(async (req, res, next) => {
   let product;
   const id = req.params.id;
@@ -152,6 +150,8 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     image: image.path,
   });
 
+  await invalidateCache({ product: true });
+
   res.status(201).json({
     status: "success",
     data: newProduct,
@@ -206,6 +206,8 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     { new: true, runValidators: true }
   );
 
+  await invalidateCache({ product: true });
+
   res.status(200).json({
     status: "success",
     data: updatedProduct,
@@ -223,6 +225,8 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   });
 
   await Product.findByIdAndDelete(req.params.id);
+
+  await invalidateCache({ product: true });
 
   res.status(204).json({
     status: "success",
