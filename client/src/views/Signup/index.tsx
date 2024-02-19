@@ -7,6 +7,9 @@ import { useState } from "react";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { GoEyeClosed } from "react-icons/go";
 import { Button } from "primereact/button";
+import { useSignupMutation } from "../../redux/api/authApiSlice";
+import ToastAlert from "../../components/ToastAlert";
+import DotLoader from "../../components/Spinner/dotLoader";
 
 interface SignupForm {
   name: string;
@@ -33,8 +36,33 @@ const Signup = () => {
     setConfirmPasswordShow(!confirmPasswordShow);
   };
 
-  const SignupHandler = async (values: SignupForm) => {
-    console.log("values", values);
+  // Sign Up Api Bind
+  const [signupUser, { isLoading }] = useSignupMutation();
+
+  const SignupHandler = async (data: SignupForm) => {
+    const payload = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      passwordConfirm: data.passwordConfirm,
+    };
+
+    try {
+      const user: any = await signupUser(payload);
+
+      if (user?.data?.status) {
+        ToastAlert("User Successfully Created", "success");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1200);
+      }
+      if (user?.error) {
+        ToastAlert(user?.error?.data?.message, "error");
+      }
+    } catch (error) {
+      console.error("SignUp Error:", error);
+      ToastAlert("Something went wrong", "error");
+    }
   };
 
   return (
@@ -204,19 +232,24 @@ const Signup = () => {
                       </div>
 
                       {/* 3rd Row */}
-                      <div className="w-full flex gap-4 mt-3">
+                      <div className="w-full flex gap-4 mt-3 mb-2">
                         <div className="flex w-1/2 flex-col gap-2">
                           <button
                             type="submit"
                             className="bg-cyan text-white p-2 rounded-md"
                           >
-                            Sign Up
+                            {isLoading ? (
+                              <DotLoader color="#fff" size={12} />
+                            ) : (
+                              "Sign Up"
+                            )}
                           </button>
                         </div>
 
                         <Button
                           className="w-1/2 flex h-10 items-center justify-center gap-2"
                           size="small"
+                          type="button"
                           //   onClick={googleLogin}
                         >
                           <i className="bx bxl-google text-2xl"></i>
