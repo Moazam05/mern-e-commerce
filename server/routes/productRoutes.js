@@ -7,7 +7,6 @@ const singleUpload = require("../middleware/multer");
 const router = express.Router();
 
 // PUBLIC ROUTES
-
 router.get("/categories", productController.getCategories);
 router.get("/latest", productController.getLatestProducts);
 router.get("/all", productController.allSearchProducts);
