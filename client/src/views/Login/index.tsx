@@ -7,6 +7,11 @@ import { InputText } from "primereact/inputtext";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { GoEyeClosed } from "react-icons/go";
 import { Button } from "primereact/button";
+import { useLoginMutation } from "../../redux/api/authApiSlice";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/auth/authSlice";
+import ToastAlert from "../../components/ToastAlert";
+import DotLoader from "../../components/Spinner/dotLoader";
 
 interface ISLoginForm {
   email: string;
@@ -15,6 +20,7 @@ interface ISLoginForm {
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // states
   const [showPassword, setShowPassword] = useState(false);
@@ -27,8 +33,30 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const LoginHandler = async (values: ISLoginForm) => {
-    console.log(values);
+  // Login Api Bind
+  const [loginUser, { isLoading }] = useLoginMutation();
+
+  const LoginHandler = async (data: ISLoginForm) => {
+    const payload = {
+      email: data.email,
+      password: data.password,
+    };
+
+    try {
+      const user: any = await loginUser(payload);
+
+      if (user?.data?.status) {
+        dispatch(setUser(user?.data));
+        localStorage.setItem("user", JSON.stringify(user?.data));
+        navigate("/");
+      }
+      if (user?.error) {
+        ToastAlert(user?.error?.data?.message, "error");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      ToastAlert("Something went wrong!", "error");
+    }
   };
 
   return (
@@ -142,7 +170,11 @@ const Login = () => {
                               type="submit"
                               className="bg-cyan text-white p-2 rounded-md"
                             >
-                              Login
+                              {isLoading ? (
+                                <DotLoader color="#fff" size={12} />
+                              ) : (
+                                "Login"
+                              )}
                             </button>
                           </div>
                         </Form>
