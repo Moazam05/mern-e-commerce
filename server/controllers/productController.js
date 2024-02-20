@@ -4,8 +4,8 @@ const AppError = require("../utils/appError");
 const Product = require("../models/productModel");
 const checkRequiredFields = require("../utils/requiredFieldError");
 const { rm } = require("fs");
-const { myCache } = require("../server");
 const { invalidateCache } = require("../utils");
+const myCache = require("../utils/cache");
 
 // TODO: Revalidate cache on update, delete, or create, or place new order
 exports.getLatestProducts = catchAsync(async (req, res, next) => {
@@ -15,8 +15,7 @@ exports.getLatestProducts = catchAsync(async (req, res, next) => {
     latestProducts = JSON.parse(myCache.get("latestProducts"));
   } else {
     latestProducts = await Product.find().sort({ createdAt: -1 }).limit(5);
-    (await myCache) &&
-      myCache.set("latestProducts", JSON.stringify(latestProducts));
+    myCache && myCache.set("latestProducts", JSON.stringify(latestProducts));
   }
 
   res.status(200).json({

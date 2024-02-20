@@ -1,5 +1,5 @@
-const { myCache } = require("../app");
 const Product = require("../models/productModel");
+const myCache = require("./cache");
 
 // TODO: 1) Invalidate cache
 const invalidateCache = async ({ product, order, admin }) => {

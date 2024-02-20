@@ -3,8 +3,6 @@ const express = require("express");
 const morgan = require("morgan");
 const colors = require("colors");
 const cors = require("cors");
-const path = require("path");
-const NodeCache = require("node-cache");
 // Custom Imports
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -17,9 +15,6 @@ const corsOptions = {
   methods: "*",
   allowedHeaders: "*",
 };
-
-// Cache
-module.exports.myCache = new NodeCache();
 
 const app = express();
 app.use(cors(corsOptions));

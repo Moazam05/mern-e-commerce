@@ -8,6 +8,7 @@ const router = express.Router();
 router.use(authController.protect);
 
 router.post("/new", orderController.newOrder);
+router.get("/my-orders", orderController.myOrders);
 
 // PUBLIC ROUTES
 

@@ -4,6 +4,7 @@ const AppError = require("../utils/appError");
 const checkRequiredFields = require("../utils/requiredFieldError");
 const { reduceStock, invalidateCache } = require("../utils");
 const Order = require("../models/orderModel");
+const myCache = require("../utils/cache");
 
 exports.newOrder = catchAsync(async (req, res, next) => {
   const {
@@ -56,5 +57,23 @@ exports.newOrder = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     data: newOrder,
+  });
+});
+
+// TODO: Revalidate cache on update, delete, or create, or place new order
+exports.myOrders = catchAsync(async (req, res, next) => {
+  let orders;
+
+  if (myCache && myCache.get(`myOrders-${req.user._id}`)) {
+    orders = JSON.parse(myCache.get(`myOrders-${req.user._id}`));
+  } else {
+    orders = await Order.find({ user: req.user._id });
+    myCache && myCache.set(`myOrders-${req.user._id}`, JSON.stringify(orders));
+  }
+
+  res.status(200).json({
+    status: "success",
+    results: orders.length,
+    data: orders,
   });
 });
