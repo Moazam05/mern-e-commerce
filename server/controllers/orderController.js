@@ -64,11 +64,30 @@ exports.newOrder = catchAsync(async (req, res, next) => {
 exports.myOrders = catchAsync(async (req, res, next) => {
   let orders;
 
-  if (myCache && myCache.get(`myOrders-${req.user._id}`)) {
-    orders = JSON.parse(myCache.get(`myOrders-${req.user._id}`));
+  const key = `myOrders-${req.user._id}`;
+
+  if (myCache && myCache.get(key)) {
+    orders = JSON.parse(myCache.get(key));
   } else {
     orders = await Order.find({ user: req.user._id });
-    myCache && myCache.set(`myOrders-${req.user._id}`, JSON.stringify(orders));
+    myCache && myCache.set(key, JSON.stringify(orders));
+  }
+
+  res.status(200).json({
+    status: "success",
+    results: orders.length,
+    data: orders,
+  });
+});
+
+exports.allOrders = catchAsync(async (req, res, next) => {
+  let orders;
+
+  if (myCache && myCache.get("allOrders")) {
+    orders = JSON.parse(myCache.get("allOrders"));
+  } else {
+    orders = await Order.find().populate("user", "name");
+    myCache && myCache.set("allOrders", JSON.stringify(orders));
   }
 
   res.status(200).json({
