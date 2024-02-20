@@ -2,6 +2,8 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const checkRequiredFields = require("../utils/requiredFieldError");
+const { reduceStock, invalidateCache } = require("../utils");
+const Order = require("../models/orderModel");
 
 exports.newOrder = catchAsync(async (req, res, next) => {
   const {
@@ -23,7 +25,6 @@ exports.newOrder = catchAsync(async (req, res, next) => {
     "shippingCharges",
     "discount",
     "total",
-    "status",
     "orderItems",
   ];
   const missingFields = checkRequiredFields(req.body, requiredFields);
@@ -45,7 +46,13 @@ exports.newOrder = catchAsync(async (req, res, next) => {
     orderItems,
   });
 
-  // 3) Send Response
+  // 3) Reduce stock
+  await reduceStock(orderItems);
+
+  // 4) Invalidate cache
+  await invalidateCache({ product: true, order: true, admin: true });
+
+  // 5) Send Response
   res.status(201).json({
     status: "success",
     data: newOrder,

@@ -1,5 +1,7 @@
+const { myCache } = require("../app");
 const Product = require("../models/productModel");
 
+// TODO: 1) Invalidate cache
 const invalidateCache = async ({ product, order, admin }) => {
   if (product) {
     const productKeys = ["latestProducts", "categories", "products"];
@@ -10,7 +12,7 @@ const invalidateCache = async ({ product, order, admin }) => {
       productKeys.push(`product-${product._id}`);
     });
 
-    myCache.del(productKeys);
+    myCache && myCache.del(productKeys);
   }
 
   if (order) {
@@ -21,3 +23,17 @@ const invalidateCache = async ({ product, order, admin }) => {
 };
 
 exports.invalidateCache = invalidateCache;
+
+// TODO: 2) Reduce stock
+const reduceStock = async (orderItems) => {
+  for (let i = 0; i < orderItems.length; i++) {
+    const order = orderItems[i];
+    const product = await Product.findById(order.productId);
+    if (!product) continue;
+
+    product.stock = product.stock - order.quantity;
+    await product.save({ validateBeforeSave: false });
+  }
+};
+
+exports.reduceStock = reduceStock;
