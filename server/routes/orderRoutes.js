@@ -10,6 +10,9 @@ router.use(authController.protect);
 
 router.post("/new", orderController.newOrder);
 router.get("/my-orders", orderController.myOrders);
+router
+  .get("/:id", orderController.getOrder)
+  .patch("/:id", orderController.updateOrder);
 
 // TODO: ADMIN
 router.get("/", onlyAdmin, orderController.allOrders);

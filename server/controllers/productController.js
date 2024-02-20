@@ -65,10 +65,11 @@ exports.getProduct = catchAsync(async (req, res, next) => {
     product = JSON.parse(myCache.get(`product-${id}`));
   } else {
     product = await Product.findById(req.params.id);
+
+    if (!product) return next(new AppError("Product not found", 404));
+
     myCache && myCache.set(`product-${id}`, JSON.stringify(product));
   }
-
-  if (!product) return next(new AppError("Product not found", 404));
 
   res.status(200).json({
     status: "success",

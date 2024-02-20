@@ -6,6 +6,7 @@ const { reduceStock, invalidateCache } = require("../utils");
 const Order = require("../models/orderModel");
 const myCache = require("../utils/cache");
 
+// TODO: Revalidate cache on update, delete, or create, or place new order
 exports.newOrder = catchAsync(async (req, res, next) => {
   const {
     shippingInfo,
@@ -60,7 +61,27 @@ exports.newOrder = catchAsync(async (req, res, next) => {
   });
 });
 
-// TODO: Revalidate cache on update, delete, or create, or place new order
+exports.updateOrder = catchAsync(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new AppError("Order not found", 404));
+  }
+
+  const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  await invalidateCache({ product: true, order: true, admin: true });
+
+  res.status(200).json({
+    status: "success",
+    data: updatedOrder,
+  });
+});
+
+// TODO: Cache API
 exports.myOrders = catchAsync(async (req, res, next) => {
   let orders;
 
@@ -80,6 +101,29 @@ exports.myOrders = catchAsync(async (req, res, next) => {
   });
 });
 
+// TODO: Cache API
+exports.getOrder = catchAsync(async (req, res, next) => {
+  let order;
+
+  if (myCache && myCache.get(`order-${req.params.id}`)) {
+    order = JSON.parse(myCache.get(`order-${req.params.id}`));
+  } else {
+    order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return next(new AppError("Order not found", 404));
+    }
+
+    myCache && myCache.set(`order-${req.params.id}`, JSON.stringify(order));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: order,
+  });
+});
+
+// TODO: ADMIN
 exports.allOrders = catchAsync(async (req, res, next) => {
   let orders;
 
