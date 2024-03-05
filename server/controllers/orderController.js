@@ -73,6 +73,10 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
 
+  // Reduce stock
+  await reduceStock(updatedOrder);
+
+  // Invalidate cache
   await invalidateCache({ product: true, order: true, admin: true });
 
   res.status(200).json({
@@ -134,9 +138,56 @@ exports.allOrders = catchAsync(async (req, res, next) => {
     myCache && myCache.set("allOrders", JSON.stringify(orders));
   }
 
+  await invalidateCache({ product: true, order: true, admin: true });
+
   res.status(200).json({
     status: "success",
     results: orders.length,
     data: orders,
+  });
+});
+
+exports.processOrder = catchAsync(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new AppError("Order not found", 404));
+  }
+
+  switch (order.status) {
+    case "Processing":
+      order.status = "Shipped";
+      break;
+    case "Shipped":
+      order.status = "Delivered";
+      break;
+    default:
+      order.status = "Delivered";
+  }
+
+  const updatedOrder = await order.save();
+
+  await invalidateCache({ product: false, order: true, admin: true });
+
+  res.status(200).json({
+    status: "success",
+    data: updatedOrder,
+  });
+});
+
+exports.deleteOrder = catchAsync(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new AppError("Order not found", 404));
+  }
+
+  await order.deleteOne();
+
+  await invalidateCache({ product: false, order: true, admin: true });
+
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
 });

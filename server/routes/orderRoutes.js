@@ -15,7 +15,11 @@ router
   .patch("/:id", orderController.updateOrder);
 
 // TODO: ADMIN
-router.get("/", onlyAdmin, orderController.allOrders);
+router.use(onlyAdmin);
+
+router.get("/", orderController.allOrders);
+router.patch("/process/:id", orderController.processOrder);
+router.delete("/delete/:id", orderController.deleteOrder);
 
 // PUBLIC ROUTES
 
