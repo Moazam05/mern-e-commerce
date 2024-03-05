@@ -52,7 +52,12 @@ exports.newOrder = catchAsync(async (req, res, next) => {
   await reduceStock(orderItems);
 
   // 4) Invalidate cache
-  await invalidateCache({ product: true, order: true, admin: true });
+  await invalidateCache({
+    product: true,
+    order: true,
+    admin: true,
+    userId: user,
+  });
 
   // 5) Send Response
   res.status(201).json({
@@ -167,7 +172,12 @@ exports.processOrder = catchAsync(async (req, res, next) => {
 
   const updatedOrder = await order.save();
 
-  await invalidateCache({ product: false, order: true, admin: true });
+  await invalidateCache({
+    product: false,
+    order: true,
+    admin: true,
+    userId: order.user,
+  });
 
   res.status(200).json({
     status: "success",
@@ -184,7 +194,12 @@ exports.deleteOrder = catchAsync(async (req, res, next) => {
 
   await order.deleteOne();
 
-  await invalidateCache({ product: false, order: true, admin: true });
+  await invalidateCache({
+    product: false,
+    order: true,
+    admin: true,
+    userId: order.user,
+  });
 
   res.status(204).json({
     status: "success",

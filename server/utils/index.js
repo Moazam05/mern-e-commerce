@@ -1,8 +1,9 @@
+const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const myCache = require("./cache");
 
 // TODO: 1) Invalidate cache
-const invalidateCache = async ({ product, order, admin }) => {
+const invalidateCache = async ({ product, order, admin, userId }) => {
   if (product) {
     const productKeys = ["latestProducts", "categories", "products"];
 
@@ -16,6 +17,15 @@ const invalidateCache = async ({ product, order, admin }) => {
   }
 
   if (order) {
+    const orderKeys = ["allOrders", `myOrders-${userId}`];
+
+    const orders = await Order.find().select("_id");
+
+    orders.forEach((order) => {
+      orderKeys.push(`order-${order._id}`);
+    });
+
+    myCache && myCache.del(orderKeys);
   }
 
   if (admin) {
