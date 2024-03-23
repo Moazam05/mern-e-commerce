@@ -10,5 +10,8 @@ const router = express.Router();
 
 // Payment ROUTES
 router.post("/new", paymentController.newCoupon);
+router.get("/discount", paymentController.getDiscount);
+router.get("/all", paymentController.getAllCoupons);
+router.delete("/delete/:id", paymentController.deleteCoupon);
 
 module.exports = router;
