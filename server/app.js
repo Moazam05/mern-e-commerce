@@ -9,6 +9,7 @@ const globalErrorHandler = require("./controllers/errorController");
 const userRouter = require("./routes/userRoutes");
 const productRouter = require("./routes/productRoutes");
 const orderRouter = require("./routes/orderRoutes");
+const couponRouter = require("./routes/payment");
 
 const corsOptions = {
   origin: "*",
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/coupons", couponRouter);
 
 // PRODUCTION SETUP
 if (process.env.NODE_ENV === "production") {
