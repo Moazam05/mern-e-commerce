@@ -7,10 +7,11 @@ const router = express.Router();
 
 // Payment ROUTES
 router.get("/discount", paymentController.getDiscount);
-
-router.use(onlyAdmin);
+router.post("/payment", paymentController.createPaymentIntent);
 
 // ADMIN ONLY
+router.use(onlyAdmin);
+
 router.post("/new", paymentController.newCoupon);
 router.get("/all", paymentController.getAllCoupons);
 router.delete("/delete/:id", paymentController.deleteCoupon);

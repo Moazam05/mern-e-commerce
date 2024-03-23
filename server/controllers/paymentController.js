@@ -1,6 +1,25 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Coupon = require("../models/couponModel");
+const stripe = require("../utils/stripe");
+
+exports.createPaymentIntent = catchAsync(async (req, res, next) => {
+  const { amount } = req.body;
+
+  if (!amount) {
+    return next(new AppError("Amount is required", 400));
+  }
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: Number(amount) * 100,
+    currency: "pkr",
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: paymentIntent.client_secret,
+  });
+});
 
 exports.newCoupon = catchAsync(async (req, res, next) => {
   const { coupon, amount } = req.body;
